@@ -1,21 +1,26 @@
 package main
 
 import (
-	"net/http"
+	"golang-authentication-jwt/config"
+	"golang-authentication-jwt/controller"
+	_"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
+var(
+	db *gorm.DB = config.SetUpDatabaseConnection()
+	authController controller.AuthController = controller.NewAuthController()
+)
 
 func main()  {
-	dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-  	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	defer config.CloseDatabaseConnection(db)
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	authRoute := r.Group("api/auth")
+	authRoute.POST("/login", authController.Login)
+	authRoute.POST("/register", authController.Register)
+
 	r.Run() 
 }

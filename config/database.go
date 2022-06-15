@@ -6,6 +6,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
+	"gorm.io/driver/mysql"
 )
 
 func SetUpDatabaseConnection() *gorm.DB {
