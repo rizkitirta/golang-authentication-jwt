@@ -2,11 +2,12 @@ package config
 
 import (
 	"fmt"
+	"golang-authentication-jwt/entity"
 	"os"
 
 	"github.com/joho/godotenv"
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func SetUpDatabaseConnection() *gorm.DB {
@@ -26,6 +27,8 @@ func SetUpDatabaseConnection() *gorm.DB {
 		panic(err)
 	}
 
+	// AutoMigrate 
+	db.AutoMigrate(&entity.Book{}, &entity.User{})
 	return db
 }
 
